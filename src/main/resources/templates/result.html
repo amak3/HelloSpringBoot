@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Wynik</title>
+</head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<body>
+<h1>Wynik</h1>
+<table style="width:15%">
+<tr>
+<th>Dzielnica</th>
+<th>Głosy</th> 
+</tr>
+<tr th:each="instance : ${choicesCounter}">
+     <td th:text="${instance.key}"></td>
+     <td th:text="${instance.value}"></td>
+</tr>
+</table>	
+</body>
+</html>
