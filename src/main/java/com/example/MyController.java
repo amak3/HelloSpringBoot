@@ -6,9 +6,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -57,24 +54,15 @@ public class MyController {
 		return "add";
 	}
 	
-	@RequestMapping(path = "/ankieta", method = RequestMethod.GET)
-	public String form(Model model)
-	{
-		model.addAttribute("choicesCounter", choicesCounter);
-		return "form";
-	}
-	
-
-	@RequestMapping(path = "/upload", method = RequestMethod.GET)
+	@RequestMapping(path = "/addDistrict", method = RequestMethod.GET)
 	public String upload(Model model)
 	{
-		return "upload";
+		return "addDistrict";
 	}
 	
-    @RequestMapping(value = "/fileUploaded", method = RequestMethod.POST)
+    @RequestMapping(value = "/importFromFile", method = RequestMethod.POST)
     public String uploadDistricts(Model model,
-    						@RequestParam("file") MultipartFile file,
-    						@RequestParam(value="district", required=true) String choice) throws IOException{
+    						@RequestParam("file") MultipartFile file) throws IOException{
     	
     	InputStream input = new BufferedInputStream(file.getInputStream());
     	BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(input));
@@ -82,50 +70,40 @@ public class MyController {
    	
     	String line;
     	while ((line = bufferedReader.readLine()) != null) {
-    		choicesCounter.put(line, 0);
+    		form.createForm(line, 0);
     	}
-    	
-    	if (!(choicesCounter.containsKey(choice)) && !(choice.length()==0))
-		{
-			choicesCounter.put(choice, 0);
-		}
-    	    	
-    	return "redirect:/ankieta";
+    	   	    	
+    	return "redirect:/form";
     } 
     
-	static Map<String, Integer> choicesCounter = new HashMap<>();
+    @RequestMapping(value="/importFromTextField", method = RequestMethod.POST)
+    public String uploadDistrictFromTextField(Model model,
+    							@RequestParam(value="district", required=true) String choice) throws IOException{
+    	if (!(choice.length()==0))
+		{
+    		form.createForm(choice, 0);
+		}
+    	    	
+    	return "redirect:/form";
+    }
+	
+	@RequestMapping(path = "/form", method = RequestMethod.GET)
+	public String form(Model model)
+	{
+		model.addAttribute("data", form.obtainData());
+		return "form";
+	}
 
-//	static
-//	{
-//		choicesCounter = new HashMap<>();
-//		try {
-//			Path path = Paths.get("C:\\\\Users\\\\maka3\\\\Documents\\\\districts.txt");
-//			List<String> lines = Files.readAllLines(path, Charset.defaultCharset() );
-//			for (int i = 0; i < lines.size(); i++)
-//			{
-//				choicesCounter.put(lines.get(i), 0);				
-//			}
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
-
-	@RequestMapping(path = "/wynik", method = RequestMethod.POST)
+    @RequestMapping(path = "/result", method = RequestMethod.POST)
 	public String result(Model model,
 			@RequestParam(value="district", required=true) String choice)
 	{	
-		if (choicesCounter.containsKey(choice))
-		{
-			Integer counter = choicesCounter.get(choice);
-			counter +=1;
-			choicesCounter.put(choice, counter);
-		}
-		else
-		{
-			choicesCounter.put(choice, 1);
-		}
-		model.addAttribute("choicesCounter", choicesCounter);
+		int counter = form.obtainVotes(choice);
+		counter += 1;
+		form.updateForm(choice, counter);
 		
+		model.addAttribute("data", form.obtainData());
+			
 		return "result";
 	}
 		

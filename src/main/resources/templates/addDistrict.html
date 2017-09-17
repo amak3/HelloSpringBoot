@@ -6,15 +6,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <body>
 <h1>Manager danych</h1>
-<form action="/fileUploaded" method="post" enctype="multipart/form-data">
+<form action="/importFromFile" method="post" enctype="multipart/form-data">
     Pobierz plik:<br></br>
     <input type="file" name="file" id="fileToUpload"></input>
     <input type="submit" value="Pobierz" name="submit"></input><br></br>
     <br></br>
+</form>
+<form action="/importFromTextField" method="post" enctype="multipart/form-data">
     ... lub dodaj dzielnice pojedynczo: <br></br>
     <input type="text" name="district"></input>
-    <input type="submit" value="Dodaj"> </input>
-    
+    <input type="submit" value="Dodaj"> </input> 
 </form>
 </body>
 </html>

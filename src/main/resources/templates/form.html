@@ -6,9 +6,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <body>
 <h1>Ankieta - Wybierz swoją ulubioną dzielnicę Poznania</h1>
-<form action="/wynik" method="POST">
-<div th:each="instance,iter : ${choicesCounter}">
-     <input type="radio" name="district" th:value="${instance.key}" th:checked="(${iter.index} == 0)"/><span th:text="${instance.key}"></span><br></br>
+<form action="/result" method="POST">
+<div th:each="instance,iter : ${data}">
+     <input type="radio" name="district" th:value="${instance.district}" th:checked="(${iter.index} == 0)"/><span th:text="${instance.district}"></span><br></br>
 </div>
 	<input type="submit" value="Zagłosuj"/>
 </form>

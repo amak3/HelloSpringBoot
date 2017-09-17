@@ -11,9 +11,9 @@
 <th>Dzielnica</th>
 <th>Głosy</th> 
 </tr>
-<tr th:each="instance : ${choicesCounter}">
-     <td th:text="${instance.key}"></td>
-     <td th:text="${instance.value}"></td>
+<tr th:each="instance : ${data}">
+     <td th:text="${instance.district}"></td>
+     <td th:text="${instance.votes}"></td>
 </tr>
 </table>	
 </body>
